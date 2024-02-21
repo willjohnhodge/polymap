@@ -2,5 +2,8 @@ import styled from 'styled-components';
 
 export const HeaderContainer = styled.div`
     display: block;
-    background-color: #ccc;
+`;
+
+export const Title = styled.h1`
+    color: var(--color-coral);
 `;
