@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import config from 'config/client.json';
+
 import {
   Map as MapboxMap,
 } from 'react-map-gl';
@@ -18,9 +20,9 @@ const initialViewState = {
   zoom: 12,
 }
 
-const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
-
-console.log(process.env)
+const mapboxToken = process.env.NODE_ENV === 'production' ?
+  process.env.REACT_APP_MAPBOX_TOKEN :
+  config.mapboxAccessToken;
 
 export const Map: FC<MapProps> = () => {
 
