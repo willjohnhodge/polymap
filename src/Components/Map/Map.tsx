@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import config from 'config/client.json';
 
+import 'mapbox-gl/dist/mapbox-gl.css';
 import {
   Map as MapboxMap,
 } from 'react-map-gl';

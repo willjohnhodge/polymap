@@ -5,7 +5,7 @@ import { HeaderContainer, Title } from './Header.styles';
 export const Header: FC = () => {
   return (
     <HeaderContainer>
-      <Title>Polymap</Title>
+      <Title>polymap</Title>
     </HeaderContainer>
   );
 };

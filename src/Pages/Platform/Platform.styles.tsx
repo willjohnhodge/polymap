@@ -1,8 +1,15 @@
 import styled from 'styled-components';
 
 export const PlatformContainer = styled.div`
-  display: block;
-  height: 100%;
-  max-width: 90vh;
+  display: flex;
+  flex-direction: column;
+  height: calc(-3.3rem + 100vh);
   position: relative;
+
+  background-color: var(--color-white);
 `;
+
+export const ContentContainer = styled.div`
+  display: flex;
+  padding: 5px;
+`
