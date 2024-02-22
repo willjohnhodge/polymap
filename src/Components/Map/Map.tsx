@@ -18,7 +18,7 @@ const initialViewState = {
   zoom: 12,
 }
 
-const mapboxToken = process.env.MAPBOX_TOKEN;
+const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 console.log(process.env)
 
