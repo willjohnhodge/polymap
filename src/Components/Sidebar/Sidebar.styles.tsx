@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 type SideBarContainerProps = {
   $minimised: boolean;
@@ -49,6 +49,8 @@ export const CloseButton = styled(Button)`
   min-width: 30px !important;
   min-height: 30px !important;
   height: fit-content;
+
+  color: var(--color-navy) !important;
 
   border-radius: 100px !important;
   border: 2px solid red;
