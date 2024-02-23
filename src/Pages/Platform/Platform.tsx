@@ -1,11 +1,12 @@
 import { FC } from 'react';
 import { Map } from 'Components/Map';
-import { ContentContainer, PlatformContainer } from './Platform.styles';
+import { PlatformContainer } from './Platform.styles';
+import { Sidebar } from 'Components/Sidebar';
 
 export const Platform: FC = () => {
   return (
     <PlatformContainer>
-      <ContentContainer>Hey! This app is under development... by Will</ContentContainer>
+      <Sidebar />
       <Map />
     </PlatformContainer>
   );

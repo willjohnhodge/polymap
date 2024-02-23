@@ -8,8 +8,3 @@ export const PlatformContainer = styled.div`
 
   background-color: var(--color-white);
 `;
-
-export const ContentContainer = styled.div`
-  display: flex;
-  padding: 5px;
-`
