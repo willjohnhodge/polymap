@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useEffect, useRef } from 'react';
 
 import config from 'config/client.json';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {
+  MapRef,
   Map as MapboxMap,
 } from 'react-map-gl';
 
@@ -26,11 +27,21 @@ const mapboxToken = process.env.NODE_ENV === 'production' ?
   config.mapboxAccessToken;
 
 export const Map: FC<MapProps> = () => {
+  const mapRef = useRef<MapRef | null>(null);
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const map = mapRef.current.getMap()
+    map.touchZoomRotate.disableRotation()
+
+  }, [mapRef.current])
 
   return (
     <StyledMapWrapper
     >
       <MapboxMap
+        ref={mapRef}
         reuseMaps={true}
         mapStyle={'mapbox://styles/willhodge/clswwr8jz002k01oi0sj758jr'}
         style={containerStyle}
@@ -39,7 +50,7 @@ export const Map: FC<MapProps> = () => {
         mapboxAccessToken={mapboxToken}
         pitchWithRotate={false}
         dragRotate={false}
-        touchZoomRotate={false}
+        touchZoomRotate={true}
         maxPitch={0}
         touchPitch={false}
         boxZoom={false} // Shift and draw box to zoom to that box
