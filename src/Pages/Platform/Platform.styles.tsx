@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-export const PlatformContainer = styled.div`
+type PlatformContainerProps = {
+  $mobile: boolean;
+};
+export const PlatformContainer = styled.div<PlatformContainerProps>`
   display: flex;
   flex-direction: column;
   height: calc(-3.3rem + 100vh);

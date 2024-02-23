@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-export const HeaderContainer = styled.div`
+type HeaderContainerProps = {
+  $mobile: boolean;
+}
+export const HeaderContainer = styled.div<HeaderContainerProps>`
   display: flex;
   flex-direction: row;
   height: 3.3rem;

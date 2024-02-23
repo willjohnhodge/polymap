@@ -1,8 +1,16 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Button } from '@mui/material';
+import { breakpoints } from 'Constants';
+
+const mobileStyling = css`
+  width: 100%;
+  border-radius: 0;
+  max-height: 50%;
+`;
 
 type SideBarContainerProps = {
   $minimised: boolean;
+  $mobile: boolean;
 }
 export const SidebarContainer = styled.div<SideBarContainerProps>`
   display: flex;
@@ -11,7 +19,7 @@ export const SidebarContainer = styled.div<SideBarContainerProps>`
   position: absolute;
 
   min-width: 300px;
-  height: 95%;
+  max-height: 95%;
 
   padding: 0.8rem;
   padding-left: 1rem;
@@ -30,10 +38,19 @@ export const SidebarContainer = styled.div<SideBarContainerProps>`
 
   background-color: var(--color-white);
 
+  ${({ $mobile }) =>
+    $mobile && mobileStyling
+  }
+
+  @media screen and (max-width: ${breakpoints.sm}px) {
+    ${mobileStyling}
+  }
+
   transition: 1s;
   ${({ $minimised }) =>
-    $minimised && 'height: fit-content'
+    $minimised && 'height: fit-content;'
   }
+
 `;
 
 export const SidebarHeader = styled.div`
@@ -42,6 +59,14 @@ export const SidebarHeader = styled.div`
 
   justify-content: space-between;
   align-items: center;
+`;
+
+export const SidebarContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  padding-top: 10px;
 `;
 
 export const CloseButton = styled(Button)`
@@ -61,4 +86,8 @@ export const CloseButton = styled(Button)`
   .MuiTouchRipple-root {
     display: none;
   }
+`;
+
+export const StyledImg = styled.img`
+  max-width: 260px;
 `;
