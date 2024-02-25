@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Platform } from '../Platform';
 import { MainContainer } from './Main.styles';
 
@@ -15,12 +15,6 @@ export const Main: FC<MainProps> = ({ mobile }) => {
           <Platform mobile={mobile} />
         </MainContainer>
       } />
-
-      {/* If user tries invalid URL, redirect to '/' */}
-      <Route
-        path="*"
-        element={<Navigate to="/" replace />}
-      />
     </Routes>
   )
 };

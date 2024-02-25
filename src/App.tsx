@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { ProviderWrapper } from './Providers/ProviderWrapper';
 import { Main } from './Pages/Main';
@@ -17,6 +17,12 @@ const App: FC = () => {
         <Routes>
           <Route path="/" element={<Main mobile={isMobile} />} />
           <Route path="/about" element={<About />} />
+
+          {/* If user tries invalid URL, redirect to '/' */}
+          <Route
+            path="*"
+            element={<Navigate to="/" replace />}
+          />
         </Routes>
       </ProviderWrapper>
     </BrowserRouter>
