@@ -23,7 +23,7 @@ export const HeaderContainer = styled.div<HeaderContainerProps>`
 export const Title = styled.h1`
   width: fit-content;
 
-  padding: 0.2rem;
+  margin: 0;
 
   font-weight: 300;
 
