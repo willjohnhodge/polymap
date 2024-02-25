@@ -1,21 +1,26 @@
 import { FC } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { Header } from '../../Components/Header';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Platform } from '../Platform';
 import { MainContainer } from './Main.styles';
-import { isMobileDevice } from '_Functions';
 
-
-export const Main: FC = () => {
-  const isMobile = isMobileDevice();
+type MainProps = {
+  mobile: boolean;
+}
+export const Main: FC<MainProps> = ({ mobile }) => {
   return (
     <Routes>
+
       <Route path='/' element={
         <MainContainer>
-          <Header mobile={isMobile}/>
-          <Platform mobile={isMobile}/>
+          <Platform mobile={mobile} />
         </MainContainer>
       } />
+
+      {/* If user tries invalid URL, redirect to '/' */}
+      <Route
+        path="*"
+        element={<Navigate to="/" replace />}
+      />
     </Routes>
   )
 };

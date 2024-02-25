@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { HeaderContainer, Title } from './Header.styles';
+import { HeaderContainer, Title, StyledLink } from './Header.styles';
 
 type HeaderProps = {
   mobile: boolean;
@@ -8,7 +8,8 @@ type HeaderProps = {
 export const Header: FC<HeaderProps> = ({ mobile }) => {
   return (
     <HeaderContainer $mobile={mobile}>
-      <Title>polymap</Title>
+      <StyledLink to={'/'}><Title>polymap</Title></StyledLink>
+      <StyledLink to={'/about'}><span>about</span></StyledLink>
     </HeaderContainer>
   );
 };
