@@ -14,7 +14,7 @@ export const HeaderContainer = styled.div<HeaderContainerProps>`
   align-items: center;
   justify-content: center;
 
-  background-color: var(--color-platinumBlue);
+  background-color: var(--color-fadedNavy);
 
   box-sizing: border-box;
   border-bottom: 2px solid var(--color-navy);
@@ -37,7 +37,7 @@ export const StyledLink = styled(Link)`
 
   :hover {
     color: var(--color-white);
-    text-shadow: 1px 1px 10px #999;
+    text-shadow: 0 0 3px #999;
   }
 
 `;
