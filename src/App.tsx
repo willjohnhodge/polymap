@@ -15,7 +15,7 @@ const App: FC = () => {
       <ProviderWrapper>
         <Header mobile={isMobile} />
         <Routes>
-          <Route path="/" element={<Main mobile={isMobile} />} />
+          <Route path="*" element={<Main mobile={isMobile} />} />
           <Route path="/about" element={<About />} />
 
           {/* If user tries invalid URL, redirect to '/' */}

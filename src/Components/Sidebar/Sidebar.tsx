@@ -23,7 +23,7 @@ export const Sidebar: FC<HeaderProps> = ({ mobile }) => {
                 </CloseButton>
             </SidebarHeader>
             {!isMinimised && <SidebarContent>
-                <StyledImg src="https://media0.giphy.com/media/tlGD7PDy1w8fK/giphy.gif" alt="Office gif" />
+                <i>Functionality coming soon</i>
             </SidebarContent>}
         </SidebarContainer>
     );
