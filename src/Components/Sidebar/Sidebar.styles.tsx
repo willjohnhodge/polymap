@@ -18,8 +18,8 @@ export const SidebarContainer = styled.div<SideBarContainerProps>`
 
   position: absolute;
 
-  min-width: 300px;
-  max-height: 95%;
+  width: 300px;
+  height: 300px;
 
   padding: 0.8rem;
   padding-left: 1rem;
@@ -38,6 +38,10 @@ export const SidebarContainer = styled.div<SideBarContainerProps>`
 
   background-color: var(--color-white);
 
+  transition: height 0.2s ease-out;
+  
+  user-select: none;
+
   ${({ $mobile }) =>
     $mobile && mobileStyling
   }
@@ -46,9 +50,8 @@ export const SidebarContainer = styled.div<SideBarContainerProps>`
     ${mobileStyling}
   }
 
-  transition: 1s;
   ${({ $minimised }) =>
-    $minimised && 'height: fit-content;'
+    $minimised && 'height: 53px; '
   }
 
 `;
@@ -59,6 +62,8 @@ export const SidebarHeader = styled.div`
 
   justify-content: space-between;
   align-items: center;
+
+  cursor: pointer;
 `;
 
 export const SidebarContent = styled.div`
@@ -86,8 +91,4 @@ export const CloseButton = styled(Button)`
   .MuiTouchRipple-root {
     display: none;
   }
-`;
-
-export const StyledImg = styled.img`
-  max-width: 260px;
 `;
