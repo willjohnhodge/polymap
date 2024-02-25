@@ -1,41 +1,74 @@
-import { FC, useEffect, useRef } from 'react';
-
-import config from 'config/client.json';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {
   MapRef,
   Map as MapboxMap,
+  useControl,
 } from 'react-map-gl';
+
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 
 import { MapProps } from './Map.types';
 import { StyledMapWrapper } from './Map.styles';
 
-const containerStyle = {
-  height: '100%',
-  width: '100%',
-};
+import { containerStyle, initialViewState, mapboxToken } from './Map.constants';
 
-const initialViewState = {
-  longitude: 144.9631,
-  latitude: -37.8136,
-  zoom: 12,
+// import ControlPanel from './control-panel';
+
+const DrawControl = () => {
+  const draw = new MapboxDraw({
+    displayControlsDefault: false,
+    controls: {
+      polygon: true,
+      trash: true
+    },
+    defaultMode: "draw_polygon"
+  });
+
+  useControl<MapboxDraw>(() => draw, {
+    position: 'top-left'
+  });
+
+  return null;
 }
 
-const mapboxToken = process.env.NODE_ENV === 'production' ?
-  process.env.REACT_APP_MAPBOX_TOKEN :
-  config.mapboxAccessToken;
-
 export const Map: FC<MapProps> = () => {
+  const [features, setFeatures] = useState<any>({});
+
   const mapRef = useRef<MapRef | null>(null);
+
+  const onUpdate = useCallback(e => {
+    console.log(e)
+    const newFeatures = { ...features };
+    for (const f of e.features) {
+      newFeatures[f.id] = f;
+    }
+
+    setFeatures(newFeatures);
+  }, [features]);
+
+  mapRef.current && mapRef.current.on('draw.create', onUpdate);
+
+  const onDelete = useCallback(e => {
+    console.log(e)
+    const newFeatures = { ...features };
+    for (const f of e.features) {
+      delete newFeatures[f.id];
+    }
+
+    setFeatures(newFeatures);
+  }, [features]);
 
   useEffect(() => {
     if (!mapRef.current) return;
 
-    const map = mapRef.current.getMap()
-    map.touchZoomRotate.disableRotation()
+    console.log(mapRef)
 
-  }, [mapRef.current])
+    const map = mapRef.current.getMap();
+    map.touchZoomRotate.disableRotation();
+  }, []);
 
   return (
     <StyledMapWrapper
@@ -55,7 +88,10 @@ export const Map: FC<MapProps> = () => {
         touchPitch={false}
         boxZoom={false} // Shift and draw box to zoom to that box
         customAttribution='Will Hodge'
-      />
+      >
+        <DrawControl />
+        {/* <ControlPanel polygons={Object.values(features)} /> */}
+      </MapboxMap>
     </StyledMapWrapper>
   );
 };

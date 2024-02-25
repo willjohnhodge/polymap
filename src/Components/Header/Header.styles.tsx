@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { breakpoints } from 'Constants';
 
 type HeaderContainerProps = {
   $mobile: boolean;
@@ -8,8 +9,6 @@ export const HeaderContainer = styled.div<HeaderContainerProps>`
   display: flex;
   flex-direction: row;
   height: 3.3rem;
-
-  gap: 0.5rem;
 
   align-items: center;
   justify-content: center;
@@ -31,9 +30,26 @@ export const Title = styled.h1`
 
 `;
 
+export const Navlinks = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+
+  position: absolute;
+
+  right: 0;
+  padding-right: 25px;
+
+  @media screen and (max-width: ${breakpoints.sm}px) {
+    margin-left: 20px;
+  }
+`;
+
 export const StyledLink = styled(Link)`
   color: var(--color-lightSilver);
   text-decoration: none;
+
+  font-weight: 200;
 
   :hover {
     color: var(--color-white);
