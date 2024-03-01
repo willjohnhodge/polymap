@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef } from 'react';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {
@@ -14,57 +14,118 @@ import { MapProps } from './Map.types';
 import { StyledMapWrapper } from './Map.styles';
 
 import { containerStyle, initialViewState, mapboxToken } from './Map.constants';
+import { Feature, FeatureCollection, Geometry, GeometryCollection, Properties } from '@turf/turf';
 
 // import ControlPanel from './control-panel';
 
-const DrawControl = () => {
-  const draw = new MapboxDraw({
-    displayControlsDefault: false,
-    controls: {
-      polygon: true,
-      trash: true
-    },
-    defaultMode: "draw_polygon"
-  });
+type DrawControlProps = ConstructorParameters<typeof MapboxDraw>[0] & {
+  drawRef: React.MutableRefObject<any>;
 
-  useControl<MapboxDraw>(() => draw, {
+  onCreate?: (evt: { features: FeatureCollection<Geometry | GeometryCollection, Properties> }) => void;
+  onUpdate?: (evt: { features: FeatureCollection<Geometry | GeometryCollection, Properties> }) => void;
+  onDelete?: (evt: { features: FeatureCollection<Geometry | GeometryCollection, Properties> }) => void;
+};
+
+const DrawControl = (props: DrawControlProps) => {
+  useControl<MapboxDraw>(
+    () => {
+      return props.drawRef.current;
+    },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore TODO: fix types from example code
+    ({ map }: { map: MapRef }) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO: fix types from example code
+      map.on('draw.create', props.onCreate);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO: fix types from example code
+      map.on('draw.update', props.onUpdate);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO: fix types from example code
+      map.on('draw.delete', props.onDelete);
+    },
+    ({ map }: { map: MapRef }) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO: fix types from example code
+      map.off('draw.create', props.onCreate);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO: fix types from example code
+      map.off('draw.update', props.onUpdate);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO: fix types from example code
+      map.off('draw.delete', props.onDelete);
+    }, {
     position: 'top-left'
   });
 
   return null;
 }
 
-export const Map: FC<MapProps> = () => {
-  const [features, setFeatures] = useState<any>({});
+interface FeatureProps {
+  features: FeatureCollection<Geometry | GeometryCollection, Properties>;
+  setFeatures: Dispatch<SetStateAction<FeatureCollection<Geometry | GeometryCollection, Properties>>>;
+}
+export const Map: FC<MapProps & FeatureProps> = ({ features, setFeatures }) => {
 
   const mapRef = useRef<MapRef | null>(null);
 
-  const onUpdate = useCallback(e => {
-    console.log(e)
-    const newFeatures = { ...features };
-    for (const f of e.features) {
-      newFeatures[f.id] = f;
-    }
+  const drawRef = useRef(
+    new MapboxDraw({
+      displayControlsDefault: false,
+      controls: {
+        polygon: true,
+        trash: true
+      },
+      defaultMode: "draw_polygon"
+    })
+  );
 
-    setFeatures(newFeatures);
-  }, [features]);
+  const onCreate = useCallback((e) => {
+    console.log('created')
+    console.log('features', features)
 
-  mapRef.current && mapRef.current.on('draw.create', onUpdate);
+    let resultFeatures: FeatureCollection = { ...features };
 
-  const onDelete = useCallback(e => {
-    console.log(e)
-    const newFeatures = { ...features };
-    for (const f of e.features) {
-      delete newFeatures[f.id];
-    }
+    const drawFeatures: Feature[] = e.features;
+    drawFeatures.map((f) => {
+      const newFeature = f;
 
-    setFeatures(newFeatures);
-  }, [features]);
+      resultFeatures.features = [...resultFeatures.features, newFeature]
+    })
+
+    setFeatures(resultFeatures);
+  }, []);
+
+  const onUpdate = useCallback((e) => {
+    console.log('updated');
+    let resultFeatures: FeatureCollection = { ...features };
+
+    const drawFeatures: Feature[] = e.features;
+    drawFeatures.map((f) => {
+      const newFeature = f;
+
+      resultFeatures.features = [...resultFeatures.features, newFeature]
+    })
+
+    setFeatures(resultFeatures);
+  }, []);
+
+  const onDelete = useCallback((e) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore TODO: fix types
+    setFeatures((features) => {
+      const newFeatures = { ...features };
+      for (const f of e.features) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore TODO: fix types
+        delete newFeatures[f.id];
+      }
+      return newFeatures;
+    });
+  }, []);
 
   useEffect(() => {
     if (!mapRef.current) return;
-
-    console.log(mapRef)
 
     const map = mapRef.current.getMap();
     map.touchZoomRotate.disableRotation();
@@ -89,7 +150,12 @@ export const Map: FC<MapProps> = () => {
         boxZoom={false} // Shift and draw box to zoom to that box
         customAttribution='Will Hodge'
       >
-        <DrawControl />
+        <DrawControl
+          drawRef={drawRef}
+          onCreate={onCreate}
+          onUpdate={onUpdate}
+          onDelete={onDelete}
+        />
         {/* <ControlPanel polygons={Object.values(features)} /> */}
       </MapboxMap>
     </StyledMapWrapper>
